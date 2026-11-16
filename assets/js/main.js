@@ -19,10 +19,21 @@
   if ('IntersectionObserver' in window && !reduced) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-in');
-          io.unobserve(entry.target);
-        }
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('is-in');
+        io.unobserve(el);
+        // Al terminar la entrada, se libera el elemento para que recupere
+        // sus propias transiciones y efectos hover.
+        const release = (e) => {
+          if (e && (e.target !== el || e.propertyName !== 'transform')) return;
+          el.removeEventListener('transitionend', release);
+          el.removeAttribute('data-reveal');
+          el.classList.remove('is-in');
+          el.style.removeProperty('--d');
+        };
+        el.addEventListener('transitionend', release);
+        setTimeout(release, 2000); // respaldo si transitionend no llega
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
     revealEls.forEach((el) => io.observe(el));
@@ -103,17 +114,52 @@
     clearInterval(timer);
     if (!reduced) timer = setInterval(() => show(current + 1), 7000);
   };
+  const slides = document.querySelector('.voices__slides');
+  const card = document.querySelector('.voices__card');
   document.querySelectorAll('.voices .arrow').forEach((btn) => {
-    btn.addEventListener('click', () => { show(current + Number(btn.dataset.dir)); auto(); });
+    btn.addEventListener('click', () => {
+      if (slides) slides.setAttribute('aria-live', 'polite');
+      show(current + Number(btn.dataset.dir));
+      auto();
+    });
   });
-  if (voices.length > 1) auto();
+  if (voices.length > 1) {
+    auto();
+    // Pausa mientras se lee o se interactúa con la tarjeta.
+    card.addEventListener('pointerenter', () => clearInterval(timer));
+    card.addEventListener('pointerleave', auto);
+    card.addEventListener('focusin', () => clearInterval(timer));
+    card.addEventListener('focusout', auto);
+  }
 
   /* ---------- Antes / después ---------- */
   const ba = document.querySelector('.ba');
   if (ba) {
     const range = ba.querySelector('.ba__range');
     const set = (v) => ba.style.setProperty('--pos', `${v}%`);
+    range.step = '0.1';
     range.addEventListener('input', () => { ba.classList.remove('is-intro'); set(range.value); });
+
+    // Arrastre con mouse o dedo en toda la imagen (iOS no arrastra un range desde la pista).
+    const fromPointer = (e) => {
+      const r = ba.getBoundingClientRect();
+      const v = Math.min(100, Math.max(0, ((e.clientX - r.left) / r.width) * 100));
+      range.value = v.toFixed(1);
+      ba.classList.remove('is-intro');
+      set(range.value);
+    };
+    let dragging = false;
+    ba.addEventListener('dragstart', (e) => e.preventDefault());
+    ba.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') e.preventDefault();
+      dragging = true;
+      ba.setPointerCapture(e.pointerId);
+      fromPointer(e);
+    });
+    ba.addEventListener('pointermove', (e) => { if (dragging) fromPointer(e); });
+    const stop = () => { dragging = false; };
+    ba.addEventListener('pointerup', stop);
+    ba.addEventListener('pointercancel', stop);
 
     // Pequeña demostración al entrar en pantalla: invita a interactuar.
     if ('IntersectionObserver' in window && !reduced) {
