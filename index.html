@@ -42,20 +42,46 @@
 
   <a class="skip" href="#sobre-mi">Saltar al contenido</a>
 
+  <!-- ============ NAVBAR ============ -->
+  <header class="nav" data-nav>
+    <div class="nav__inner">
+      <a class="brand" href="#inicio" aria-label="Macarena Rivera Arquitectura, inicio">
+        <img src="assets/img/logo.png" alt="" width="495" height="288">
+      </a>
+      <nav class="nav__links" aria-label="Principal">
+        <a href="#inicio" class="is-active">Inicio</a>
+        <a href="#sobre-mi">Sobre mí</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#proyectos">Proyectos</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <a class="pill pill--light nav__cta" href="https://wa.me/56996889647?text=Hola%20Macarena%2C%20quiero%20cotizar%20un%20proyecto" target="_blank" rel="noopener">
+        <span>Escríbeme</span><i class="pill__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>
+      </a>
+      <button class="burger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu__links" aria-label="Menú móvil">
+      <a href="#inicio"><small>01</small>Inicio</a>
+      <a href="#sobre-mi"><small>02</small>Sobre mí</a>
+      <a href="#servicios"><small>03</small>Servicios</a>
+      <a href="#proyectos"><small>04</small>Proyectos</a>
+      <a href="#preguntas"><small>05</small>Preguntas</a>
+    </nav>
+    <div class="menu__foot">
+      <a class="pill pill--light" href="https://wa.me/56996889647?text=Hola%20Macarena%2C%20quiero%20cotizar%20un%20proyecto" target="_blank" rel="noopener"><span>Cotizar por WhatsApp</span><i class="pill__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
+      <p>Lunes a viernes · 10:00 a 17:00<br>Stripcenter Alcázar, Local 5 · Algarrobo</p>
+    </div>
+  </div>
+
   <!-- ============ HERO ============ -->
   <header class="hero" id="inicio">
     <div class="hero__frame">
       <img class="hero__img" src="assets/img/hero-galassi.webp" alt="Casa Galassi al atardecer, proyecto con permiso y recepción final" width="1600" height="1201" fetchpriority="high">
       <div class="hero__shade" aria-hidden="true"></div>
 
-      <div class="hero__top">
-        <a class="brand" href="#inicio" aria-label="Macarena Rivera Arquitectura, inicio">
-          <img src="assets/img/logo.png" alt="" width="495" height="288">
-        </a>
-        <a class="pill pill--light" href="https://wa.me/56996889647?text=Hola%20Macarena%2C%20quiero%20cotizar%20un%20proyecto" target="_blank" rel="noopener" data-wa>
-          <span>Escríbeme</span><i class="pill__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>
-        </a>
-      </div>
 
       <div class="hero__content">
         <p class="eyebrow eyebrow--light hero__kicker" data-reveal>Arquitecta · Algarrobo</p>
@@ -74,15 +100,6 @@
       </aside>
     </div>
   </header>
-
-  <!-- ============ NAV FLOTANTE ============ -->
-  <nav class="dock" aria-label="Secciones">
-    <a href="#inicio" class="is-active">Inicio</a>
-    <a href="#sobre-mi">Sobre mí</a>
-    <a href="#servicios">Servicios</a>
-    <a href="#proyectos">Proyectos</a>
-    <a href="#preguntas">Preguntas</a>
-  </nav>
 
   <main>
     <!-- ============ SOBRE MÍ ============ -->

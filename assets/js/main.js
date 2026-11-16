@@ -30,8 +30,30 @@
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
 
-  /* ---------- Menú flotante: sección activa ---------- */
-  const dockLinks = [...document.querySelectorAll('.dock a')];
+  /* ---------- Navbar: fondo al hacer scroll + menú móvil ---------- */
+  const nav = document.querySelector('[data-nav]');
+  const burger = document.querySelector('.burger');
+  const menu = document.getElementById('menu');
+
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const setMenu = (open) => {
+    nav.classList.toggle('is-open', open);
+    menu.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    menu.setAttribute('aria-hidden', String(!open));
+  };
+  burger.addEventListener('click', () => setMenu(!menu.classList.contains('is-open')));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+  window.matchMedia('(min-width: 961px)').addEventListener('change', (e) => { if (e.matches) setMenu(false); });
+
+  /* ---------- Sección activa en el menú ---------- */
+  const dockLinks = [...document.querySelectorAll('.nav__links a')];
   const sections = dockLinks
     .map((a) => document.querySelector(a.getAttribute('href')))
     .filter(Boolean);
